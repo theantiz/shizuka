@@ -27,7 +27,7 @@ function App() {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/email/reply",
+        "https://shizuka-mv0v.onrender.com/api/email/reply",
         { emailContent, tone: emailTone }
       );
 

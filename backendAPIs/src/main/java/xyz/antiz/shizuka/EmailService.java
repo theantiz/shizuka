@@ -3,9 +3,14 @@ package xyz.antiz.shizuka;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class EmailService {
@@ -28,30 +33,26 @@ public class EmailService {
     public String generateEmailReply(EmailRequest emailRequest) {
         String prompt = buildPrompt(emailRequest);
 
-        // Correct Gemini generateContent request body (contents/parts/text)
-        String reqBody = """
-                {
-                  "contents": [
-                    {
-                      "parts": [
-                        { "text": "%s" }
-                      ]
-                    }
-                  ]
-                }
-                """.formatted(prompt);
+        Map<String, Object> part = Map.of("text", prompt);
+        Map<String, Object> content = Map.of("parts", List.of(part));
+        Map<String, Object> body = Map.of("contents", List.of(content));
 
         String response = webClient.post()
-                .uri("/v1beta/models/gemini-2.5-flash:generateContent")
+                .uri("/v1beta/models/gemini-2.5-flash:generateContent?key=" + apiKey)
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("x-goog-api-key", apiKey)
-                .bodyValue(reqBody)
+                .bodyValue(body)   // Jackson escapes HTML/quotes correctly
                 .retrieve()
+                .onStatus(HttpStatusCode::isError, clientResponse ->
+                        clientResponse.bodyToMono(String.class).flatMap(errorBody ->
+                                Mono.error(new RuntimeException("Gemini error: " + errorBody))
+                        )
+                )
                 .bodyToMono(String.class)
                 .block();
 
         return extractResponseContent(response);
     }
+
 
     private String extractResponseContent(String response) {
         try {

@@ -1,30 +1,36 @@
 {
-    "name": "Shizuka",
-    "description": "AI Email Assistant",
-    "version": "1.0",
-    "manifest_version": 3,
-    "permissions": ["activeTab", "storage"],
-    "host_permissions": ["http://localhost:8080/*", "*://mail.google.com/*"],
-    "action": {
-        "default_title": "Shizuka"
-    },
-    "content_scripts": [
-        {
-            "js": [
-                "content.js"
-            ],
-            "matches": [
-                "*://mail.google.com/*"
-            ],
-            "css": ["content.css"],
-            "run_at": "document_end"
-        }
-    ],
+  "name": "Shizuka",
+  "description": "AI Email Assistant",
+  "version": "1.0",
+  "manifest_version": 3,
+  "permissions": ["activeTab", "storage"],
+  "host_permissions": ["http://localhost:8080/*", "*://mail.google.com/*"],
 
-    "web_accessible_resources": [
-        {
-            "resources": ["icon/*"],
-            "matches": ["*://mail.google.com/*"]
-        }
-    ]
+  "icons": {
+    "128": "icon/shizuka.png"
+  },
+
+  "action": {
+    "default_title": "Shizuka",
+    "default_icon": {
+      "16": "icon/shizuka.png",
+      "32": "icon/shizuka.png"
+    }
+  },
+
+  "content_scripts": [
+    {
+      "js": ["content.js"],
+      "matches": ["*://mail.google.com/*"],
+      "css": ["content.css"],
+      "run_at": "document_end"
+    }
+  ],
+
+  "web_accessible_resources": [
+    {
+      "resources": ["icon/*"],
+      "matches": ["*://mail.google.com/*"]
+    }
+  ]
 }

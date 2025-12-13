@@ -78,7 +78,7 @@ public class EmailService {
 
     private String buildPrompt(EmailRequest emailRequest) {
         StringBuilder prompt = new StringBuilder();
-        prompt.append("Generate a email reply for the following email(make sure only mail so i can copy and paste directly). ");
+        prompt.append("Generate a email reply for the following email(make sure only mail so i can copy and paste directly & no subject - my name is Jay). ");
 
         if (emailRequest.getTone() != null && !emailRequest.getTone().isEmpty()) {
             prompt.append("Use a ").append(emailRequest.getTone()).append(" tone. ");

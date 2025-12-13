@@ -10,6 +10,8 @@ import {
   Paper,
   Box,
   Container,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
@@ -22,6 +24,7 @@ function App() {
   const [emailTone, setEmailTone] = useState("");
   const [loading, setLoading] = useState(false);
   const [generatedReply, setGeneratedReply] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -52,7 +55,7 @@ function App() {
     if (generatedReply) {
       try {
         await navigator.clipboard.writeText(generatedReply);
-        alert("Email content copied to clipboard!");
+        setSnackbarOpen(true);
       } catch (err) {
         console.error("Failed to copy text: ", err);
       }
@@ -76,6 +79,10 @@ function App() {
         console.error("Failed to copy text: ", err);
       }
     }
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
   };
 
   return (
@@ -118,7 +125,7 @@ function App() {
                 zIndex: 1,
                 color: "text.secondary",
               }}
-            ></Box>
+            />
           </Box>
 
           <FormControl fullWidth size="small" sx={{ mb: 4 }}>
@@ -132,6 +139,9 @@ function App() {
               <MenuItem value="professional">Professional</MenuItem>
               <MenuItem value="casual">Casual</MenuItem>
               <MenuItem value="friendly">Friendly</MenuItem>
+              <MenuItem value="formal">Formal</MenuItem>
+              <MenuItem value="concise">Concise</MenuItem>
+              <MenuItem value="detailed">Detailed</MenuItem>
             </Select>
           </FormControl>
 
@@ -172,7 +182,7 @@ function App() {
                 zIndex: 1,
                 color: "text.secondary",
               }}
-            ></Box>
+            />
           </Box>
 
           <Button
@@ -202,6 +212,22 @@ function App() {
           </Typography>
         </Box>
       </Container>
+
+      {/* SNACKBAR */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          Copied to clipboard!
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

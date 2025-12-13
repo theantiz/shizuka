@@ -28,30 +28,75 @@ function findComposeToolbar() {
     return null;
 }
 
+function createToneDropdown() {
+    const dropdown = document.createElement('select');
+    dropdown.className = 'ai-tone-select';
+    dropdown.style.marginRight = '8px';
+    dropdown.style.padding = '4px 8px';
+    dropdown.style.border = '1px solid #dadce0';
+    dropdown.style.borderRadius = '4px';
+    dropdown.style.fontSize = '13px';
+    dropdown.style.backgroundColor = 'white';
+
+    const tones = [
+        { value: 'professional', label: 'Professional' },
+        { value: 'friendly', label: 'Friendly' },
+        { value: 'casual', label: 'Casual' },
+        { value: 'formal', label: 'Formal' },
+        { value: 'concise', label: 'Concise' },
+        { value: 'detailed', label: 'Detailed' }
+    ];
+
+    tones.forEach(tone => {
+        const option = document.createElement('option');
+        option.value = tone.value;
+        option.textContent = tone.label;
+        if (tone.value === 'professional') option.selected = true;
+        dropdown.appendChild(option);
+    });
+
+    return dropdown;
+}
+
 function createAIButton() {
+    // Container for dropdown + button
+    const container = document.createElement('div');
+    container.className = 'ai-reply-container';
+    container.style.display = 'flex';
+    container.style.alignItems = 'center';
+    container.style.gap = '4px';
+    container.style.marginRight = '16px';  // ← Added space after container
+
+    const dropdown = createToneDropdown();
     const button = document.createElement('div');
+
     button.className = 'T-I J-J5-Ji aoO v7 T-I-atL L3 ai-reply-button';
-    button.style.marginRight = '8px';
-    button.innerHTML = 'Shizuka';
+    button.style.margin = '0';
+    button.innerHTML = 'Generate';
     button.setAttribute('role', 'button');
-    button.setAttribute('data-tooltip', 'Generate AI reply');
+    button.setAttribute('data-tooltip', 'Shizuka - AI Email Assistant');
+
+    // Store dropdown reference on button for access in click handler
+    button._toneDropdown = dropdown;
 
     button.addEventListener('click', async () => {
         console.log('AI Reply button clicked');
         try {
             button.innerHTML = 'Generating...';
             button.style.pointerEvents = 'none';
+            dropdown.style.pointerEvents = 'none';
 
             const emailContent = getEmailContent();
+            const selectedTone = dropdown.value;
 
             const response = await fetch('http://localhost:8080/api/email/reply', {
                 method: 'POST',
-                headers: {            // ← was `header`
+                headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     emailContent,
-                    tone: 'professional'
+                    tone: selectedTone
                 })
             });
 
@@ -62,29 +107,32 @@ function createAIButton() {
             const generatedReply = await response.text();
 
             const composeBox = document.querySelector(
-                '[role="textbox"][g_editable="true"]' // ← was role:"textbox"
+                '[role="textbox"][g_editable="true"]'
             );
 
             if (composeBox) {
                 composeBox.focus();
-                document.execCommand('insertText', false, generatedReply); // deprecated but works in Gmail [web:29][web:38]
+                document.execCommand('insertText', false, generatedReply);
             } else {
                 console.warn('Compose box not found');
             }
         } catch (err) {
             console.error('Error generating AI reply', err);
         } finally {
-            button.innerHTML = 'Shizuka';
+            button.innerHTML = 'Generate';
             button.style.pointerEvents = 'auto';
+            dropdown.style.pointerEvents = 'auto';
         }
     });
 
-    return button;
+    container.appendChild(dropdown);
+    container.appendChild(button);
+    return container;
 }
 
 function injectButton() {
-    const existingButton = document.querySelector('.ai-reply-button');
-    if (existingButton) existingButton.remove();
+    const existingContainer = document.querySelector('.ai-reply-container');
+    if (existingContainer) existingContainer.remove();
 
     const toolbar = findComposeToolbar();
     if (!toolbar) {
@@ -93,8 +141,8 @@ function injectButton() {
     }
 
     console.log('Toolbar found');
-    const button = createAIButton();
-    toolbar.insertBefore(button, toolbar.firstChild);
+    const aiContainer = createAIButton();
+    toolbar.insertBefore(aiContainer, toolbar.firstChild);
 }
 
 const observer = new MutationObserver((mutations) => {

@@ -1,67 +1,67 @@
 # Shizuka – AI Email Assistant 📧🤖
 
-Shizuka is an **AI-powered Email Assistant** that helps you generate smart, context-aware **email replies** using **Google Gemini AI**.  
-It includes a **web app backend + frontend** and an upcoming **browser extension** that adds a simple button inside the email compose window to generate replies instantly.
+Shizuka is an **AI-powered Email Assistant** that helps generate smart, context-aware **email replies** using **Google Gemini AI**.  
+It includes a complete **web application (backend + frontend)** and a **browser extension** that adds a one-click reply button directly inside the email compose window.
 
 ## ✨ What It Does
 
-* Generates professional and contextual email replies
-* Uses Google Gemini AI for natural language understanding
-* One-click reply generation
-* Designed to work directly inside email compose flow (extension)
+* Generates professional and contextual email replies  
+* Uses Google Gemini AI for natural language understanding  
+* One-click reply generation  
+* Works directly inside the email compose flow via browser extension  
 
 ## 🧠 How It Works
 
-1. User provides email content
-2. Backend sends prompt to Google Gemini via Spring AI
-3. AI generates a clean, ready-to-send reply
-4. Reply is shown in the UI or injected into the compose box (extension)
+1. User provides email content  
+2. Backend sends a structured prompt to Google Gemini via Spring AI  
+3. AI generates a clean, ready-to-send reply  
+4. Reply is displayed in the UI or injected directly into the compose box  
 
 ## 🛠️ Tech Stack
 
 ### Backend
-* Java
-* Spring Boot
-* Spring AI
-* Spring Security
-* Google Gemini AI
-* REST APIs
+* Java  
+* Spring Boot  
+* Spring AI  
+* Spring Security  
+* Google Gemini AI  
+* REST APIs  
 
 ### Frontend
-* ReactJS
-* Material UI
+* ReactJS  
+* Material UI  
 
 ### DevOps & Deployment
-* Docker
-* Render (Backend)
-* Vercel (Frontend)
+* Docker  
+* Render (Backend)  
+* Vercel (Frontend)  
 
-### Extension (WIP)
-* Simple button in email compose
-* Triggers AI reply generation
-* Auto-fills reply content
+### Browser Extension
+* Adds a button inside the email compose window  
+* Triggers AI reply generation  
+* Automatically fills the generated reply  
 
 ## 🔐 Security
-* Secured APIs using Spring Security
-* Environment-based configuration for API keys
+
+* APIs secured using Spring Security  
+* Environment-based configuration for API keys  
 
 ## 🚀 Deployment
-* Backend containerized using Docker
-* Backend hosted on Render
-* Frontend deployed on Vercel
+
+* Backend containerized using Docker  
+* Backend deployed on Render  
+* Frontend deployed on Vercel  
 
 ## 📦 Features
-* AI-generated email replies
-* Clean and responsive UI
-* Secure backend APIs
-* Scalable cloud deployment
-* Extension-ready architecture
 
-## 🧩 Status
-* Web app: Working
-* Browser extension: In progress
+* AI-generated email replies  
+* Clean and responsive UI  
+* Secure backend APIs  
+* Scalable cloud deployment  
+* Fully integrated browser extension  
 
 ## 💡 Vision
-Turn everyday email replies into a one-click experience using AI — fast, secure, and practical.
 
-Technology doing the boring work, so humans can focus on thinking ✨
+Turn everyday email replies into a **one-click experience** using AI — fast, secure, and practical.
+
+Let technology handle the boring parts, so humans can focus on thinking ✨

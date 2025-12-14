@@ -14,7 +14,6 @@ import {
   Alert,
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import { useState } from "react";
 import axios from "axios";
 import Link from "@mui/material/Link";
@@ -24,10 +23,15 @@ function App() {
   const [emailTone, setEmailTone] = useState("");
   const [loading, setLoading] = useState(false);
   const [generatedReply, setGeneratedReply] = useState("");
+
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [errorOpen, setErrorOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async () => {
     setLoading(true);
+    setErrorOpen(false);
+
     try {
       const response = await axios.post(
         "https://shizuka-mv0v.onrender.com/api/email/reply",
@@ -41,7 +45,24 @@ function App() {
 
       setGeneratedReply(reply);
     } catch (error) {
-      console.error(error);
+      let message = "Something went wrong. Please try again.";
+
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
+        const backendMessage = error.response?.data?.message;
+
+        if (status === 429) {
+          message =
+            "Google Gemini free tier token limit exceeded. Please try again later.";
+        } else if (status === 401 || status === 403) {
+          message = "Gemini API token expired or unauthorized.";
+        } else if (backendMessage) {
+          message = backendMessage;
+        }
+      }
+
+      setErrorMessage(message);
+      setErrorOpen(true);
     } finally {
       setLoading(false);
     }
@@ -52,37 +73,14 @@ function App() {
   };
 
   const handleCopy = async () => {
-    if (generatedReply) {
-      try {
-        await navigator.clipboard.writeText(generatedReply);
-        setSnackbarOpen(true);
-      } catch (err) {
-        console.error("Failed to copy text: ", err);
-      }
-    }
-  };
+    if (!generatedReply) return;
 
-  const handlePaste = async () => {
     try {
-      const text = await navigator.clipboard.readText();
-      setEmailContent(text);
+      await navigator.clipboard.writeText(generatedReply);
+      setSnackbarOpen(true);
     } catch (err) {
-      console.error("Failed to paste: ", err);
+      console.error("Copy failed", err);
     }
-  };
-
-  const handleCopyFromTextArea = async (content) => {
-    if (content) {
-      try {
-        await navigator.clipboard.writeText(content);
-      } catch (err) {
-        console.error("Failed to copy text: ", err);
-      }
-    }
-  };
-
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
   };
 
   return (
@@ -103,32 +101,20 @@ function App() {
             Original Email
           </Typography>
 
-          <Box sx={{ position: "relative", mb: 2 }}>
-            <TextField
-              fullWidth
-              size="small"
-              multiline
-              minRows={4}
-              maxRows={8}
-              variant="outlined"
-              label="Paste your email..."
-              value={emailContent || ""}
-              onChange={(e) => setEmailContent(e.target.value)}
-            />
-            <Box
-              sx={{
-                position: "absolute",
-                top: 6,
-                right: 8,
-                display: "flex",
-                gap: 1,
-                zIndex: 1,
-                color: "text.secondary",
-              }}
-            />
-          </Box>
+          <TextField
+            fullWidth
+            size="small"
+            multiline
+            minRows={4}
+            maxRows={8}
+            variant="outlined"
+            label="Paste your email..."
+            value={emailContent}
+            onChange={(e) => setEmailContent(e.target.value)}
+            sx={{ mb: 2 }}
+          />
 
-          <FormControl fullWidth size="small" sx={{ mb: 4 }}>
+          <FormControl fullWidth size="small" sx={{ mb: 3 }}>
             <InputLabel>Select Tone</InputLabel>
             <Select
               value={emailTone}
@@ -150,7 +136,6 @@ function App() {
             variant="contained"
             onClick={handleSubmit}
             disabled={!emailContent || loading}
-            size="medium"
           >
             {loading ? <CircularProgress size={20} /> : "Generate Reply"}
           </Button>
@@ -162,28 +147,18 @@ function App() {
             Generated Reply
           </Typography>
 
-          <Box sx={{ position: "relative", mb: 2 }}>
-            <TextField
-              fullWidth
-              size="small"
-              multiline
-              minRows={4}
-              maxRows={8}
-              variant="outlined"
-              label="Reply will appear here..."
-              value={generatedReply || ""}
-              inputProps={{ readOnly: true }}
-            />
-            <Box
-              sx={{
-                position: "absolute",
-                top: 6,
-                right: 8,
-                zIndex: 1,
-                color: "text.secondary",
-              }}
-            />
-          </Box>
+          <TextField
+            fullWidth
+            size="small"
+            multiline
+            minRows={4}
+            maxRows={8}
+            variant="outlined"
+            label="Reply will appear here..."
+            value={generatedReply}
+            inputProps={{ readOnly: true }}
+            sx={{ mb: 2 }}
+          />
 
           <Button
             fullWidth
@@ -191,7 +166,6 @@ function App() {
             startIcon={<ContentCopyIcon fontSize="small" />}
             onClick={handleCopy}
             disabled={!generatedReply}
-            size="medium"
           >
             Copy to Clipboard
           </Button>
@@ -213,19 +187,35 @@ function App() {
         </Box>
       </Container>
 
-      {/* SNACKBAR */}
+      {/* SUCCESS TOAST */}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={3000}
-        onClose={handleSnackbarClose}
+        onClose={() => setSnackbarOpen(false)}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
         <Alert
-          onClose={handleSnackbarClose}
+          onClose={() => setSnackbarOpen(false)}
           severity="success"
           sx={{ width: "100%" }}
         >
           Copied to clipboard!
+        </Alert>
+      </Snackbar>
+
+      {/* ERROR TOAST */}
+      <Snackbar
+        open={errorOpen}
+        autoHideDuration={4000}
+        onClose={() => setErrorOpen(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setErrorOpen(false)}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {errorMessage}
         </Alert>
       </Snackbar>
     </Box>

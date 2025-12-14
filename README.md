@@ -62,6 +62,6 @@ It includes a complete **web application (backend + frontend)** and a **browser 
 
 ## 💡 Vision
 
-Turn everyday email replies into a **one-click experience** using AI — fast, secure, and practical.
+Turn everyday email replies into a **one-click experience** using AI; fast, secure, and practical.
 
 Let technology handle the boring parts, so humans can focus on thinking ✨

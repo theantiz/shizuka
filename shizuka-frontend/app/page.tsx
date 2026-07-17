@@ -15,25 +15,25 @@ import { SakuraIcon } from '@/components/SakuraIcon';
 
 const features = [
   {
-    icon: Wand2,
+    
     title: 'Instant Replies',
     jp: '即座の返信',
     desc: 'Paste any email and get a polished draft in seconds — no staring at a blank screen.',
   },
   {
-    icon: Languages,
+    
     title: 'Bilingual Tone',
     jp: 'バイリンガル対応',
     desc: 'Switch between Casual, Formal, and 敬語 with Japanese closings and signatures.',
   },
   {
-    icon: Sparkles,
+    
     title: 'Custom Style',
     jp: 'カスタムスタイル',
     desc: 'Short & Direct, Detailed, Friendly, or Concise Professional — tune every reply.',
   },
   {
-    icon: ShieldCheck,
+    
     title: 'Privacy First',
     jp: 'プライバシー重視',
     desc: 'Your emails stay yours. Nothing is stored or shared without your consent.',
@@ -379,7 +379,7 @@ export default function LandingPage() {
             >
               <div className="h-40 w-40 rounded-full bg-gradient-to-br from-sakura-100/60 to-sakura-200/40 blur-2xl" />
             </motion.div>
-            <SakuraIcon className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-20 w-20 -translate-x-1/2 -translate-y-1/2 opacity-40" />
+
 
             {/* Card 1 — top left, large */}
             <FeatureCard

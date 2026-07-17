@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 340 100% 99%;
+    --foreground: 335 30% 20%;
+    --card: 0 0% 100%;
+    --card-foreground: 335 30% 20%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 335 30% 20%;
+    --primary: 339 85% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 340 60% 96%;
+    --secondary-foreground: 335 30% 25%;
+    --muted: 340 40% 95%;
+    --muted-foreground: 335 15% 45%;
+    --accent: 339 80% 92%;
+    --accent-foreground: 335 30% 25%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 340 30% 90%;
+    --input: 340 30% 90%;
+    --ring: 339 85% 60%;
+    --radius: 1rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  .glass-subtle {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .sakura-glow {
+    box-shadow: 0 0 30px rgba(255, 143, 171, 0.25);
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@keyframes float-petal {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.7;
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(100vh) translateX(40px) rotate(360deg);
+    opacity: 0;
+  }
+}

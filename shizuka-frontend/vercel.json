@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/email/reply",
+      "destination": "https://YOUR_BACKEND_HOSTNAME/api/email/reply"
+    }
+  ]
+}
+

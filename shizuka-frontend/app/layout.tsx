@@ -3,11 +3,17 @@ import type { Metadata } from 'next';
 import { Inter, Noto_Sans_JP } from 'next/font/google';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+// Vercel build environments may block outbound calls to Google Fonts.
+// Avoid hard-failing the build by falling back when font fetch fails.
 const noto = Noto_Sans_JP({
   subsets: ['latin'],
   weight: ['300', '400', '500', '700'],
   variable: '--font-noto',
+  // next/font/google fetches at build-time; if it cannot reach Google, fallback to system sans.
+  // This prevents production build failure due to ETIMEDOUT.
+  fallback: ['system-ui', 'sans-serif'],
 });
+
 
 export const metadata: Metadata = {
   title: 'Shizuka – AI Email Assistant | シズカ',

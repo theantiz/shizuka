@@ -62,7 +62,7 @@ const steps = [
 ];
 
 interface FeatureCardProps {
-  feature: { icon: typeof Wand2; title: string; jp: string; desc: string };
+  feature: { title: string; jp: string; desc: string };
   className: string;
   rotation: number;
   delay: number;
@@ -78,9 +78,7 @@ function FeatureCard({ feature, className, rotation, delay }: FeatureCardProps) 
       whileHover={{ y: -6, rotate: 0, scale: 1.03 }}
       className={`glass-subtle absolute z-10 rounded-2xl border border-white/60 p-6 shadow-md shadow-sakura-200/30 transition-shadow hover:shadow-xl hover:shadow-sakura-300/50 ${className}`}
     >
-      <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-sakura-100 to-sakura-200">
-        <feature.icon className="h-5 w-5 text-sakura-600" strokeWidth={1.8} />
-      </div>
+     
       <h3 className="text-lg font-semibold text-foreground">
         {feature.title}
         <span className="ml-2 font-jp text-sm font-normal text-muted-foreground">
@@ -286,7 +284,7 @@ export default function LandingPage() {
                   </span>
                 </div>
                 <p className="mt-3 text-[11px] font-medium text-muted-foreground">
-                  From: client@example.com
+                  From: client@antiz.xyz
                 </p>
                 <p className="mt-1 text-xs font-semibold text-foreground">
                   Subject: Project timeline update needed
@@ -432,7 +430,7 @@ export default function LandingPage() {
                 className="glass-subtle rounded-2xl border border-white/60 p-6 shadow-sm transition-shadow hover:shadow-md hover:shadow-sakura-200/40"
               >
                 <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-sakura-100 to-sakura-200">
-                  <f.icon className="h-5 w-5 text-sakura-600" strokeWidth={1.8} />
+                  
                 </div>
                 <h3 className="text-lg font-semibold text-foreground">
                   {f.title}

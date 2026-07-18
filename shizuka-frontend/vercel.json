@@ -1,4 +1,5 @@
 {
+  "outputDirectory": ".next",
   "rewrites": [
     {
       "source": "/api/email/reply",
@@ -6,5 +7,4 @@
     }
   ]
 }
-
 
